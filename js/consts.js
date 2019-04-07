@@ -31,6 +31,6 @@ class ConfigKey {
 }
 
 class Defaults {
-    stepSize = 10;
-    minimumScroll  = 20;
+    static stepSize = 10;
+    static minimumScroll  = 20;
 }

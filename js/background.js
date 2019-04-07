@@ -11,7 +11,7 @@ chrome.storage.onChanged.addListener(setConfiguration);
 
 function setConfiguration() {
     chrome.storage.sync.get([ConfigKey.stepSize], (items) => {
-        stepSize = ConfigKey.getPositiveInt(items, Configuration.stepSize, stepSize);
+        stepSize = ConfigKey.getPositiveInt(items, ConfigKey.stepSize, stepSize);
     });
 }
 
