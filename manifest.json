@@ -1,0 +1,30 @@
+{
+    "name": "Ctrl Zoom",
+    "version": "1.0",
+    "description": "Ctrl + touchpad scroll to zoom",
+    "manifest_version": 2,
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "css": [],
+            "js": [
+                "js/contentScript.js"
+            ]
+        }
+    ],
+    "options_page": "options.html",
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ],
+        "persistent": false
+    }
+}
