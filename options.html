@@ -17,9 +17,23 @@
             <span class="label">Step size <span class="default">(default 10%)</span></span>
             <input type="number" id="stepSize" min="1" max="500" /><span class="unit">%</span>
         </label>
+        <label class="container">
+            <span class="label">Minimum delay between zooms <span class="default">(default 100ms)</span></span>
+            <input type="number" id="minDelay" min="10" max="500" /><span class="unit">ms</span>
+        </label>
         <label class="container checkbox">
             Direction reversed
             <input type="checkbox" id="directionReversed">
+            <span class="checkmark"></span>
+        </label>
+        <label class="container checkbox">
+            Use browser zoom
+            <input type="checkbox" id="useBrowserZoom">
+            <span class="checkmark"></span>
+        </label>
+        <label class="container checkbox">
+            Remember non browser zoom
+            <input type="checkbox" id="rememberZoom">
             <span class="checkmark"></span>
         </label>
         <label class="container checkbox">

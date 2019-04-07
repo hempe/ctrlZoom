@@ -1,63 +1,27 @@
-const minRatio = 0.25;
-const maxRatio = 5;
+var currentRatio = 1;
 
-var stepSize = Defaults.stepSize;
+chrome.runtime.onMessage.addListener(onMessage);
 
-var currentRatio = 0;
-var blocked = false;
-
-setConfiguration();
-chrome.storage.onChanged.addListener(setConfiguration);
-
-function setConfiguration() {
-    chrome.storage.sync.get([ConfigKey.stepSize], (items) => {
-        stepSize = ConfigKey.getPositiveInt(items, ConfigKey.stepSize, stepSize);
-    });
-}
-
-function nextRatio(ratio, direction) {
-    ratio = Math.round(ratio * 100);
-    var next = (ratio - (direction * stepSize)) / 100;
-    var ratio = next > maxRatio ? maxRatio : next < minRatio ? minRatio : next;
-    return ratio;
-}
-
-function allowNext() {
-    if (blocked)
-        return false;
-    blocked = true;
-    setTimeout(() => {
-        blocked = false;
-    }, 100);
-    return blocked;
-}
-
-function zoom(direction) {
+function zoom(direction, stepSize, minDelay) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.getZoom(tabs[0].id, function (zoomFactor) {
-            const ratio = nextRatio(zoomFactor, direction);
+            const ratio = nextRatio(zoomFactor, direction, stepSize);
             if (ratio == currentRatio)
                 return;
 
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) { zoomtab(tabs[0].id, ratio); });
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) { zoomtab(tabs[0].id, ratio, minDelay); });
         });
     });
 }
 
-function zoomtab(tab, ratio) {
-    if (currentRatio == ratio || !allowNext())
+function zoomtab(tab, ratio, minDelay) {
+    if (currentRatio == ratio || !allowNext(minDelay))
         return;
 
     chrome.tabs.setZoom(tab, ratio);
     currentRatio = ratio;
 }
 
-chrome.runtime.onMessage.addListener(function (message, _callback) {
-    if (message.name == Messages.zoom_out) {
-        zoom(+1);
-    } else if (message.name == Messages.zoom_in) {
-        zoom(-1);
-    } else {
-        console.warn("Unkown message", message);
-    }
-});
+function onMessage(message, _callback) {
+    zoom(message.direction, message.stepSize, message.minDelay);
+}
