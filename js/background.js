@@ -1,25 +1,29 @@
-
-var stepSize = 10;
 const minRatio = 0.25;
 const maxRatio = 5;
+
+var stepSize = Defaults.stepSize;
+
 var currentRatio = 0;
 var blocked = false;
 
-chrome.storage.sync.get(['stepSize'], (x) => {
-    const value = parseInt(x['stepSize']);
-    if(value > 1)
-        stepSize = value;
-});
+setConfiguration();
+chrome.storage.onChanged.addListener(setConfiguration);
+
+function setConfiguration() {
+    chrome.storage.sync.get([ConfigKey.stepSize], (items) => {
+        stepSize = ConfigKey.getPositiveInt(items, Configuration.stepSize, stepSize);
+    });
+}
 
 function nextRatio(ratio, direction) {
-    ratio = Math.round((ratio) * 100);
-    var next = (parseInt(ratio) - (direction * stepSize)) / 100;
+    ratio = Math.round(ratio * 100);
+    var next = (ratio - (direction * stepSize)) / 100;
     var ratio = next > maxRatio ? maxRatio : next < minRatio ? minRatio : next;
     return ratio;
 }
 
 function allowNext() {
-    if(blocked)
+    if (blocked)
         return false;
     blocked = true;
     setTimeout(() => {
@@ -29,29 +33,29 @@ function allowNext() {
 }
 
 function zoom(direction) {
-    chrome.tabs.query({ active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.getZoom(tabs[0].id,function(zoomFactor){
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.getZoom(tabs[0].id, function (zoomFactor) {
             const ratio = nextRatio(zoomFactor, direction);
-            if(ratio == currentRatio)
+            if (ratio == currentRatio)
                 return;
 
-            chrome.tabs.query({ active: true, currentWindow: true}, function(tabs) {zoomtab(tabs[0].id, ratio);});
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) { zoomtab(tabs[0].id, ratio); });
         });
     });
 }
 
 function zoomtab(tab, ratio) {
-    if(currentRatio == ratio || !allowNext())
+    if (currentRatio == ratio || !allowNext())
         return;
 
     chrome.tabs.setZoom(tab, ratio);
     currentRatio = ratio;
 }
 
-chrome.runtime.onMessage.addListener(function(message, _callback) {
-    if(message.name == "contentzoomout") {
+chrome.runtime.onMessage.addListener(function (message, _callback) {
+    if (message.name == Messages.zoom_out) {
         zoom(+1);
-    } else if (message.name == "contentzoomin" ){
+    } else if (message.name == Messages.zoom_in) {
         zoom(-1);
     } else {
         console.warn("Unkown message", message);
