@@ -1,14 +1,12 @@
 {
     "name": "Ctrl Zoom",
-    "version": "1.1",
+    "version": "1.2",
     "description": "Ctrl + touchpad scroll to zoom",
     "homepage_url": "https://github.com/hempe/ctrlZoom",
     "author": "hempe",
     "short_name": "ctrlZoom",
     "manifest_version": 2,
     "permissions": [
-        "activeTab",
-        "tabs",
         "storage"
     ],
     "content_scripts": [

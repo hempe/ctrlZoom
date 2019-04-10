@@ -15,7 +15,9 @@ window.addEventListener("keydown", keyPressed);
 function ctrlZoom(e) {
     if (disable || !e.ctrlKey)
         return;
+
     e.preventDefault();
+    
     if (Math.abs(e.wheelDelta) <= minimumScroll)
         return;
 
@@ -25,15 +27,9 @@ function ctrlZoom(e) {
         minDelay: minDelay
     };
 
-    if (e.wheelDelta > 0) {
-        useBrowserZoom
-            ? chrome.runtime.sendMessage(message)
-            : zoom(message)
-    } else {
-        useBrowserZoom
-            ? chrome.runtime.sendMessage(message)
-            : zoom(message);
-    }
+    useBrowserZoom
+        ? chrome.runtime.sendMessage(message)
+        : zoom(message);
 }
 
 function getDirection(zoomIn) {
