@@ -17,7 +17,7 @@ function ctrlZoom(e) {
         return;
 
     e.preventDefault();
-    
+
     if (Math.abs(e.wheelDelta) <= minimumScroll)
         return;
 
@@ -73,18 +73,19 @@ function zoom(message) {
 function keyPressed(event) {
     if (event.ctrlKey && event.code == "Digit0" && !useBrowserZoom) {
         setZoom(1);
-        localStorage.removeItem(`${window.location.hostname}:ext:zoom`);
+        localStorage.removeItem(`${hashCode(window.location.hostname)}:ext:zoom`);
     }
 }
 
 function getStoredZoom() {
-    if(!rememberZoom)
+    if (!rememberZoom)
         return getZoom();
 
     try {
-        var stored = parseFloat(localStorage.getItem(`${window.location.hostname}:ext:zoom`));
-        if (isNaN(stored) || stored > 1)
+        var stored = parseFloat(localStorage.getItem(`${hashCode(window.location.hostname)}:ext:zoom`));
+        if (isNaN(stored)) {
             return getZoom();
+        }
         return stored;
     } catch {
         return getZoom();
@@ -104,11 +105,22 @@ function getZoom() {
 
 function setZoom(ratio) {
     document.body.style.zoom = ratio;
-
-    if(!rememberZoom) {
-        localStorage.removeItem(`${window.location.hostname}:ext:zoom`);
+    console.warn(`${hashCode(window.location.hostname)}:ext:zoom`);
+    if (!rememberZoom) {
+        localStorage.removeItem(`${hashCode(window.location.hostname)}:ext:zoom`);
         return;
     }
 
-    localStorage.setItem(`${window.location.hostname}:ext:zoom`, ratio)
+    localStorage.setItem(`${hashCode(window.location.hostname)}:ext:zoom`, ratio)
 }
+
+function hashCode(source) {
+    var hash = 0, i, chr;
+    if (source.length === 0) return hash;
+    for (i = 0; i < source.length; i++) {
+        chr = source.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};
