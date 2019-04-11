@@ -105,7 +105,6 @@ function getZoom() {
 
 function setZoom(ratio) {
     document.body.style.zoom = ratio;
-    console.warn(`${hashCode(window.location.hostname)}:ext:zoom`);
     if (!rememberZoom) {
         localStorage.removeItem(`${hashCode(window.location.hostname)}:ext:zoom`);
         return;
