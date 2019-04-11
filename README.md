@@ -23,7 +23,7 @@ This will simply change the wheel direction for zooming.
 ### Use browser zoom _(default true)_
 Normaly this extension uses the chrome tab zoom _(browser zoom)_.
 
-If you use chromes _zoom_, it remembers the zoom level on a per host name basis: <chrome://settings/content/zoomLevels?search=zoom>
+If you use chromes _zoom_, it remembers the zoom level on a per host name basis: [zoomLevels](chrome://settings/content/zoomLevels?search=zoom)
 
 If you disable this, the extesion will use `document.body.style.zoom` instead, which chrome does not track.
 
