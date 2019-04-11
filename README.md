@@ -8,7 +8,7 @@ The default threshold used to determin if a wheel event should invoke a zoom. Or
 This value worked for me, depending on your touchpad or preference you might need to increase/decrease this value.
 
 ### Step size _(default 10%)_
-This value specifies how much to change the current zoom level. It's not a absolute percentage.
+This value specifies how much to change the current zoom level. It's an absolute percentage.
 If your current zoom level is 50% and you zoom in 1 _step_ the new zoom level will be 60% _(if step size is 10%)_
 
 ### Minimum delay between zooms _(default 100ms)_
