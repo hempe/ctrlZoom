@@ -27,11 +27,11 @@ If you use chromes _zoom_, it remembers the zoom level on a per host name basis:
 
 If you disable this, the extesion will use `document.body.style.zoom` instead, which chrome does not track.
 
-It will also intercept "CTRL+0" (but not prevent the default behavior) an reset _its_ zoom level to _100%_
+It will also intercept "CTRL+0" (but not prevent the default behavior) and reset _the zoom level to 100%_
 
 ### Remember non browser zoom _(default false)_
 If you disable _Use browser zoom_ the _zoom level_ is not stored anywhere by default.
-If you enable this setting, the _document.body.style.zoom_ is stored with a hashed key in localStorage and will be reapplied after a page reload.
+If you enable this setting, the current `document.body.style.zoom` is stored with a hashed key in localStorage and will be reapplied after a page reload.
 
 ### Disabled _(default false)_
 If you need to temporarily disable the _zoom_ behavior, you can simply check _Disabled_.
