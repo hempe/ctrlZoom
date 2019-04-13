@@ -1,6 +1,9 @@
 # ctrlZoom
 Chrome extension to add back "Ctrl + touch pad scroll" to zoom in and out.
 
+# Installation
+Got to the extension in [chrome web store](https://chrome.google.com/webstore/detail/ctrl-zoom/indpmklmjbcfkbnbhoknlggplddednhp) and add it to your browser.
+
 ## Configuration
 ### Scroll threshold _(default 20px)_
 The default threshold used to determin if a wheel event should invoke a zoom. Or in other words how sensitiv the zoom behavior is.
