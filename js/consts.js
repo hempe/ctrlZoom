@@ -1,124 +1,85 @@
-class Messages {
-    static zoom_in = 'contentzoomin';
-    static zoom_out = 'contentzoomout';
-    static zoom = 'contentzoom';
-}
-const configKey = [
-    'stepSize',
-    'minimumScroll',
-    'directionReversed',
-    'disable',
-    'useBrowserZoom',
-    'rememberZoom',
-    'minDelay',
-    'interceptPlusMinus',
-]
 
-const defaults = {
-    'stepSize': 10,
-    'minimumScroll': 20,
-    'directionReversed': 'false',
-    'disable': 'false',
-    'useBrowserZoom': 'true',
-    'rememberZoom': 'false',
-    'minDelay': 100,
-    'interceptPlusMinus': 'false',
-}
+class CtrlZoom {
+    constructor() {
+        this.defaults = {
+            stepSize: 10,
+            minimumScroll: 20,
+            directionReversed: 'false',
+            disable: 'false',
+            useBrowserZoom: 'true',
+            rememberZoom: 'false',
+            minDelay: 100,
+            interceptPlusMinus: 'false',
+            showPopup: 'true'
+        };
+        this.keys = Object.keys(this.defaults);
+        this.zoomStepsIn = [500, 400, 300, 250, 200, 175, 150, 125, 110, 100, 90, 80, 75, 67, 50, 33, 25];
+        this.zoomStepsOut = this.zoomStepsIn.map(x => x).reverse();
+        this._sigma = 0.01;
+        this._minRatio = 0.25;
+        this._maxRatio = 5;
+        this._blocked = false;
+    }
 
-const zoomStepsIn =  [
-    500,
-    400,
-    300,
-    250,
-    200,
-    175,
-    150,
-    125,
-    110,
-    100,
-    90,
-    80,
-    75,
-    67,
-    50,
-    33,
-    25
-];
-const zoomStepsOut = zoomStepsIn.map(x => x).reverse();
-const sigma = 0.01;
+    _getBool(items, key, defaultValue) {
+        try {
+            return items[key] == 'true';
+        } catch {
+            return defaultValue == 'true';
+        }
+    }
 
-class ConfigKey {
-    static getValue(items, key, defaultValue) {
-        if(items[key] == undefined)
+    _nextValue(steps, callbackFn) {
+        const filterd = steps.filter(callbackFn);
+        return filterd.length > 0
+            ? filterd[filterd.length - 1] / 100.0
+            : steps[0] / 100.0;
+    }
+
+    getValue(items, key) {
+        const defaultValue = this.defaults[key];
+        if (items[key] == undefined)
             return defaultValue;
-        
+
         try {
-            if(typeof defaultValue == 'boolean' || defaultValue === 'true' || defaultValue === 'false')
-                return this.getBool(items, key, defaultValue);
+            if (typeof defaultValue == 'boolean' || defaultValue === 'true' || defaultValue === 'false')
+                return this._getBool(items, key, defaultValue);
 
-            const int = parseInt(items[key]+"");
-            if(!isNaN(defaultValue))
-                return isNaN(int) ? defaultValue : int > 0 ? int : defaultValue;
-
-            return ConfigKey.getBool(items, key, defaultValue);
-        }
-        catch {
-            return ConfigKey.getBool(items, key, defaultValue);
+            const int = parseInt(items[key] + '');
+            return !isNaN(defaultValue)
+                ? isNaN(int) ? defaultValue : int > 0 ? int : defaultValue
+                : this._getBool(items, key, defaultValue);
+        } catch {
+            return this._getBool(items, key, defaultValue);
         }
     }
-    
-    static getBool(items, key, defaultValue) {
-        try {
-            return items[key] == "true";
-        }
-        catch {
-            return defaultValue == "true";
-        }
+
+    nextRatio(ratio, direction, stepSize) {
+        ratio = Math.round(ratio * 100);
+        var next = (ratio - (direction * stepSize)) / 100;
+        var ratio = next > this._maxRatio ? this._maxRatio : next < this._minRatio ? this._minRatio : next;
+        return isNaN(ratio) ? 1 : ratio;
     }
-}
 
-const minRatio = 0.25;
-const maxRatio = 5;
-var blocked = false;
-
-function nextRatio(ratio, direction, stepSize) {
-    ratio = Math.round(ratio * 100);
-    var next = (ratio - (direction * stepSize)) / 100;
-    var ratio = next > maxRatio ? maxRatio : next < minRatio ? minRatio : next;
-    return isNaN(ratio) ? 1 : ratio;
-}
-
-function nextIncrease(currentRatio){
-    const current = currentRatio * 100;
-    const next = nextValue(zoomStepsIn, x => x > (current + sigma))
-    console.info("nextIncrease", current, next, zoomStepsIn);
-    return next;
-}
-
-function nextDecrease(currentRatio) {
-    const current = currentRatio * 100;
-    const next = nextValue(zoomStepsOut, x => x < (current - sigma));
-    console.info("nextDecrease", current, next, zoomStepsOut)
-    return next;
-}
-
-function nextValue(steps, callbackFn) {
-    const filterd = steps.filter(callbackFn);
-    if(filterd.length > 0) {
-        return filterd[filterd.length-1]/100.0;
-    } else {
-        return steps[0]/100.0;
+    nextIncrease(currentRatio) {
+        const current = currentRatio * 100;
+        return this._nextValue(this.zoomStepsIn, x => x > (current + this._sigma))
     }
-}
 
-function allowNext(delay) {
-    if(!delay)
-        delay = defaults.minDelay;
-    if (blocked)
-        return false;
-    blocked = true;
-    setTimeout(() => {
-        blocked = false;
-    }, delay);
-    return blocked;
+    nextDecrease(currentRatio) {
+        const current = currentRatio * 100;
+        return this._nextValue(this.zoomStepsOut, x => x < (current - this._sigma));
+    }
+
+    allowNext(delay) {
+        if (!delay)
+            delay = this.defaults.minDelay;
+        if (this._blocked)
+            return false;
+        this._blocked = true;
+        setTimeout(() => {
+            this._blocked = false;
+        }, delay);
+        return this._blocked;
+    }
 }

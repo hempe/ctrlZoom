@@ -1,50 +1,63 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Ctrl Zoom</title>
-        <meta charset="utf-8"/>
-        <script type="text/javascript" src="js/consts.js"></script>
-        <script type="text/javascript" src="js/options.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/options.css">
-    </head>
-    <body>
-        <h1>Ctrl Zoom</h1>
-        <label class="container">
-            <span class="label">Scroll threshold <span class="default">(default 20px)</span></span>
-            <input type="number" id="minimumScroll" min="1" max="500" /><span class="unit">px</span>
-        </label>    
-        <label class="container">
-            <span class="label">Step size <span class="default">(default 10%)</span></span>
-            <input type="number" id="stepSize" min="1" max="500" /><span class="unit">%</span>
-        </label>
-        <label class="container">
-            <span class="label">Minimum delay between zooms <span class="default">(default 100ms)</span></span>
-            <input type="number" id="minDelay" min="10" max="500" /><span class="unit">ms</span>
-        </label>
+
+<head>
+    <title>Ctrl Zoom</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="js/consts.js"></script>
+    <script type="text/javascript" src="js/options.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/options.css">
+</head>
+
+<body>
+    <h1>Ctrl Zoom</h1>
+    <label class="container checkbox">
+        Use browser zoom
+        <input type="checkbox" id="useBrowserZoom">
+        <span class="checkmark"></span>
+    </label>
+    <hr />
+    <label class="container">
+        <span class="label">Scroll threshold <span class="default">(default 20px)</span></span>
+        <input type="number" id="minimumScroll" min="1" max="500" /><span class="unit">px</span>
+    </label>
+    <label class="container">
+        <span class="label">Step size <span class="default">(default 10%)</span></span>
+        <input type="number" id="stepSize" min="1" max="500" /><span class="unit">%</span>
+    </label>
+    <label class="container">
+        <span class="label">Minimum delay between zooms <span class="default">(default 100ms)</span></span>
+        <input type="number" id="minDelay" min="10" max="500" /><span class="unit">ms</span>
+    </label>
+    <label class="container checkbox">
+        Direction reversed
+        <input type="checkbox" id="directionReversed">
+        <span class="checkmark"></span>
+    </label>
+    <hr />
+    <label class="container checkbox">
+        Intercept ctrl +/-
+        <input type="checkbox" id="interceptPlusMinus">
+        <span class="checkmark"></span>
+    </label>
+    <span id="ifNot-useBrowserZoom">
         <label class="container checkbox">
-            Direction reversed
-            <input type="checkbox" id="directionReversed">
-            <span class="checkmark"></span>
-        </label>
-        <label class="container checkbox">
-            Use browser zoom
-            <input type="checkbox" id="useBrowserZoom">
-            <span class="checkmark"></span>
-        </label>
-        <label class="container checkbox">
-            Remember non browser zoom
+            Remember zoom
             <input type="checkbox" id="rememberZoom">
             <span class="checkmark"></span>
         </label>
         <label class="container checkbox">
-            Intercept ctrl +/-
-            <input type="checkbox" id="interceptPlusMinus">
+            Show PopUp
+            <input type="checkbox" id="showPopup">
             <span class="checkmark"></span>
         </label>
-        <label class="container checkbox">
-            Disabled
-            <input type="checkbox" id="disable">
-            <span class="checkmark"></span>
-        </label>
-    </body>
+    </span>
+    <hr />
+    <label class="container checkbox">
+        Disabled
+        <input type="checkbox" id="disable">
+        <span class="checkmark"></span>
+    </label>
+</body>
+
 </html>

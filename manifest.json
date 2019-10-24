@@ -18,6 +18,7 @@
             "css": [],
             "js": [
                 "js/consts.js",
+                "js/popup.js",
                 "js/contentScript.js"
             ]
         }
