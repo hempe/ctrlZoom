@@ -18,6 +18,7 @@ class Popup {
             div.style.right = 0;
             div.style.zIndex = 1000000;
             div.style.userSelect = "none";
+            div.style.fontFamily = "Roboto, sans-serif";
         }
 
         div.style.display = "flex";
@@ -31,7 +32,7 @@ class Popup {
     right:${10 / ratio}px;
     position: relative;
     box-shadow:0px ${2 / ratio}px ${3 / ratio}px -${2 / ratio}px rgba(0,0,0,0.5)">
-    <div style="margin-top:${2 / ratio}px; width:${35 / ratio}px;text-align:right;">${Math.round(ratio * 100)}%</div>
+    <div style="margin-top:${2 / ratio}px; width:${35 / ratio}px;text-align:right;">${Math.round(ratio * 100)} %</div>
     <div style="display:flex; cursor:pointer;">
         <div id="${id}_plus" style="font-size:120%; padding:0 ${5 / ratio}px 0 ${10 / ratio}px; font-weight:bold;">+</div>
         <div id="${id}_minus" style="font-size:120%; padding:0 ${10 / ratio}px 0 ${5 / ratio}px; font-weight:bold;">−</div>
