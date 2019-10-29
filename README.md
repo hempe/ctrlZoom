@@ -31,6 +31,12 @@ If you use chromes _zoom_, it remembers the zoom level on a per host name basis:
 If you disable this, the extesion will use `document.body.style.zoom` instead, which chrome does not track.
 
 It will also intercept "CTRL+0" (but not prevent the default behavior) and reset _the zoom level to 100%_
+## Intercept ctrl +/- _(default false)_
+If enabled the extension will intercept `ctrl +` and `ctrl -`.
+
+This is done because for example on the swiss keyboard layout chrome does not accept `shift ctrl 1` which should be equivalent to `ctrl +` as `ctrl +`.
+
+Unlike chrome if intercept is enabled the extension will check of the resulting `key` instead of the actual `key code`.
 
 ## Disabled _(default false)_
 If you need to temporarily disable the _zoom_ behavior, you can simply check _Disabled_.
