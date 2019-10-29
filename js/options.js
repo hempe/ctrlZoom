@@ -1,20 +1,19 @@
 (function () {
 
-    const ctrlZoom = new CtrlZoom();
-    let values = ctrlZoom.defaults;
+    const zoom = new CtrlZoom();
+    let values = zoom.defaults;
     let binded = false;
 
     window.addEventListener('load', () => readOptions());
-
     function readOptions() {
         chrome.storage.sync.get(
-            ctrlZoom.keys,
+            zoom.keys,
             (items) => {
-                ctrlZoom.keys.forEach(key => setValue(key, ctrlZoom.getValue(items, key, values[key])));
+                zoom.keys.forEach(key => setValue(key, zoom.getValue(items, key, values[key])));
                 if (binded)
                     return;
                 binded = true;
-                ctrlZoom.keys.forEach(key => bindValue(key));
+                zoom.keys.forEach(key => bindValue(key));
                 update();
             });
     }
@@ -28,24 +27,20 @@
     }
 
     function update() {
-        let e = document.getElementById("ifNot-useBrowserZoom");
-        e.style.display = values.useBrowserZoom
-            ? "none"
-            : "block";
+        zoom.element("ifNot-useBrowserZoom", e => e.style.display = values.useBrowserZoom ? "none" : "block");
+        zoom.element("if-showPopup", e => e.style.display = values.showPopup ? "block" : "none");
     }
 
     function bindValue(id) {
-        const e = document.getElementById(id);
-        e.type == 'checkbox'
+        zoom.element(id, e => e.type == 'checkbox'
             ? e.onchange = (ev) => updateValue(id, ev.target.checked)
-            : e.onchange = (ev) => updateValue(id, ev.target.value);
+            : e.onchange = (ev) => updateValue(id, ev.target.value));
     }
 
     function setValue(id, value) {
         values[id] = value;
-        const e = document.getElementById(id);
-        e.type == 'checkbox'
+        zoom.element(id, e => e.type == 'checkbox'
             ? e.checked = values[id]
-            : e.value = values[id];
+            : e.value = values[id]);
     }
 })();

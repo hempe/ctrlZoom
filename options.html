@@ -4,7 +4,7 @@
 <head>
     <title>Ctrl Zoom</title>
     <meta charset="utf-8" />
-    <script type="text/javascript" src="js/consts.js"></script>
+    <script type="text/javascript" src="js/ctrlZoom.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
     <link rel="stylesheet" type="text/css" href="css/options.css">
 </head>
@@ -51,6 +51,12 @@
             <input type="checkbox" id="showPopup">
             <span class="checkmark"></span>
         </label>
+        <div id="if-showPopup">
+            <label class="container">
+                <span class="label">Show PopUp time<span class="default">(default 2000ms)</span></span>
+                <input type="number" id="showPopupTime" min="1" max="50000" /><span class="unit">ms</span>
+            </label>
+        </div>
     </span>
     <hr />
     <label class="container checkbox">

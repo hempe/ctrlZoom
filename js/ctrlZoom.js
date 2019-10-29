@@ -1,4 +1,3 @@
-
 class CtrlZoom {
     constructor() {
         this.defaults = {
@@ -10,8 +9,10 @@ class CtrlZoom {
             rememberZoom: 'false',
             minDelay: 100,
             interceptPlusMinus: 'false',
-            showPopup: 'true'
+            showPopup: 'true',
+            showPopupTime: 2000,
         };
+        this.msgKind = "ctrl-zoom-message";
         this.keys = Object.keys(this.defaults);
         this.zoomStepsIn = [500, 400, 300, 250, 200, 175, 150, 125, 110, 100, 90, 80, 75, 67, 50, 33, 25];
         this.zoomStepsOut = this.zoomStepsIn.map(x => x).reverse();
@@ -56,8 +57,8 @@ class CtrlZoom {
 
     nextRatio(ratio, direction, stepSize) {
         ratio = Math.round(ratio * 100);
-        var next = (ratio - (direction * stepSize)) / 100;
-        var ratio = next > this._maxRatio ? this._maxRatio : next < this._minRatio ? this._minRatio : next;
+        const next = (ratio - (direction * stepSize)) / 100;
+        ratio = next > this._maxRatio ? this._maxRatio : next < this._minRatio ? this._minRatio : next;
         return isNaN(ratio) ? 1 : ratio;
     }
 
@@ -82,4 +83,32 @@ class CtrlZoom {
         }, delay);
         return this._blocked;
     }
+    getId() {
+        return this.hashCode(window.location.hostname);
+    }
+
+    element(id, callback) {
+        const e = document.getElementById(id);
+        if (!e)
+            return;
+        callback(e);
+    }
+
+    handle(event, condition, callback) {
+        if (condition) {
+            callback();
+            event.preventDefault();
+        }
+    }
+
+    hashCode(source) {
+        let hash = 0, i, chr;
+        if (source.length === 0) return hash;
+        for (i = 0; i < source.length; i++) {
+            chr = source.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        return hash;
+    };
 }
