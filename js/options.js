@@ -29,6 +29,7 @@
     function update() {
         zoom.element("ifNot-useBrowserZoom", e => e.style.display = values.useBrowserZoom ? "none" : "block");
         zoom.element("if-showPopup", e => e.style.display = values.showPopup ? "block" : "none");
+        zoom.element("ifNot-disabled", e => e.style.display = values.disable ? "none" : "block");
     }
 
     function bindValue(id) {

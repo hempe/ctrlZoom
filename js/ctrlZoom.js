@@ -3,13 +3,13 @@ class CtrlZoom {
         this.defaults = {
             stepSize: 10,
             minimumScroll: 20,
-            directionReversed: 'false',
-            disable: 'false',
-            useBrowserZoom: 'true',
-            rememberZoom: 'false',
+            directionReversed: false,
+            disable: false,
+            useBrowserZoom: true,
+            rememberZoom: false,
             minDelay: 100,
-            interceptPlusMinus: 'false',
-            showPopup: 'true',
+            interceptPlusMinus: false,
+            showPopup: true,
             showPopupTime: 2000,
         };
         this.msgKind = "ctrl-zoom-message";
