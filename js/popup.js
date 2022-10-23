@@ -1,4 +1,4 @@
-class Popup {
+export class Popup {
     constructor(ctrlZoom) {
         this.zoom = ctrlZoom;
         this._popupTimeout = 0;

@@ -1,10 +1,15 @@
-(function () {
+(async function () {
 
+    const { CtrlZoom } = await import(chrome.runtime.getURL('js/ctrlZoom.js'));
     const zoom = new CtrlZoom();
     let values = zoom.defaults;
     let binded = false;
 
-    window.addEventListener('load', () => readOptions());
+    if (document.readyState === "complete")
+        readOptions();
+    else
+        window.addEventListener('load', () => readOptions());
+
     function readOptions() {
         chrome.storage.sync.get(
             zoom.keys,

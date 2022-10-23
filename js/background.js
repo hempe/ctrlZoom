@@ -1,3 +1,5 @@
+import { CtrlZoom } from "./ctrlZoom.js";
+
 (function () {
 
     const zoom = new CtrlZoom();

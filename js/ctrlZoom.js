@@ -1,4 +1,4 @@
-class CtrlZoom {
+export class CtrlZoom {
     constructor() {
         this.defaults = {
             stepSize: 10,

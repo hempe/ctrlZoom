@@ -5,7 +5,7 @@
     "homepage_url": "https://github.com/hempe/ctrlZoom",
     "author": "hempe",
     "short_name": "ctrlZoom",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "permissions": [
         "storage"
     ],
@@ -17,19 +17,26 @@
             ],
             "css": [],
             "js": [
-                "js/ctrlZoom.js",
-                "js/popup.js",
                 "js/contentScript.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "resources": [
+                "js/popup.js",
+                "js/ctrlZoom.js"
             ]
         }
     ],
     "options_page": "options.html",
     "background": {
-        "scripts": [
-            "js/ctrlZoom.js",
-            "js/background.js"
-        ],
-        "persistent": false
+        "service_worker": "js/background.js",
+        "type": "module"
     },
     "icons": {
         "16": "images/icon_16.png",
@@ -37,7 +44,7 @@
         "48": "images/icon_48.png",
         "128": "images/icon_128.png"
     },
-    "browser_action": {
+    "action": {
         "default_icon": {
             "16": "images/icon_16.png",
             "32": "images/icon_32.png",

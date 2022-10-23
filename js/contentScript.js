@@ -1,4 +1,7 @@
-(function () {
+(async function () {
+
+    const { CtrlZoom } = await import(chrome.runtime.getURL('js/ctrlZoom.js'));
+    const { Popup } = await import(chrome.runtime.getURL('js/popup.js'));
 
     const zoom = new CtrlZoom();
     const popUp = new Popup(zoom);
