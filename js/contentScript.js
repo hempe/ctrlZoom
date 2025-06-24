@@ -21,8 +21,19 @@
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", keyPressed);
 
+    let isMetaKeyDown = false;
+
+    // Detect Command key press
+    window.addEventListener('keydown', (event) => { if (event.key === 'Meta') isMetaKeyDown = true; });
+
+    // Detect Command key release
+    window.addEventListener('keyup', (event) => { if (event.key === 'Meta') isMetaKeyDown = false; });
+
+    // Reset Command key on visibility change
+    document.addEventListener('visibilitychange', () => { if (document.hidden) isMetaKeyDown = false; });
+
     function onWheel(e) {
-        zoom.handle(e, !(values.disable || !e.ctrlKey), () => {
+        zoom.handle(e, !(values.disable || !ctrlKeyPressed(e)), () => {
             if (Math.abs(e.wheelDelta) <= values.minimumScroll)
                 return;
             sendZoom({
@@ -47,11 +58,18 @@
             : handleZoom(message);
     }
 
+    function ctrlKeyPressed(e) {
+        if (e.ctrlKey || isMetaKeyDown) {
+            return true;
+        }
+        return false;
+    }
+
     function keyPressed(e) {
-        zoom.handle(e, e.ctrlKey && e.code == "Digit0", () => reset());
+        zoom.handle(e, ctrlKeyPressed(e) && e.code == "Digit0", () => reset());
         if (values.interceptPlusMinus) {
-            zoom.handle(e, e.ctrlKey && e.key == "+", () => sendZoom({ type: '+' }));
-            zoom.handle(e, e.ctrlKey && e.key == "-", () => sendZoom({ type: '-' }));
+            zoom.handle(e, ctrlKeyPressed(e) && e.key == "+", () => sendZoom({ type: '+' }));
+            zoom.handle(e, ctrlKeyPressed(e) && e.key == "-", () => sendZoom({ type: '-' }));
         }
     }
 
