@@ -42,6 +42,8 @@
     }
 
     function sendZoom(message) {
+        if (!zoom.allowNext(values.minDelay))
+            return;
         values.useBrowserZoom
             ? chrome.runtime.sendMessage({ msgKind: zoom.msgKind, ...message })
             : handleZoom(message);
@@ -78,18 +80,16 @@
 
     function setZoom(ratio) {
         setTimeout(() => {
-            if (zoom.allowNext(values.minDelay)) {
-                if (!values.useBrowserZoom && values.showPopup)
-                    popUp.showPopup(ratio, (r) => getZoom(r), (r) => setZoom(r), () => reset(), values.showPopupTime);
+            if (!values.useBrowserZoom && values.showPopup)
+                popUp.showPopup(ratio, (r) => getZoom(r), (r) => setZoom(r), () => reset(), values.showPopupTime);
 
-                document.body.style.zoom = ratio;
-                if (!values.rememberZoom)
-                    return localStorage.removeItem(`${zoom.getId()}:ext:zoom`);
+            document.body.style.zoom = ratio;
+            if (!values.rememberZoom)
+                return localStorage.removeItem(`${zoom.getId()}:ext:zoom`);
 
-                (ratio == 1)
-                    ? localStorage.removeItem(`${zoom.getId()}:ext:zoom`)
-                    : localStorage.setItem(`${zoom.getId()}:ext:zoom`, ratio);
-            }
+            (ratio == 1)
+                ? localStorage.removeItem(`${zoom.getId()}:ext:zoom`)
+                : localStorage.setItem(`${zoom.getId()}:ext:zoom`, ratio);
         }, 0);
     }
 
